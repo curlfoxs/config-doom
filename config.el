@@ -24,7 +24,7 @@
 ;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
 ;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
 
-(setq doom-font "Cascadia Code PL Regular-10")
+;; (setq doom-font "Cascadia Code PL Regular-10")
 ;; 给unicode字符集设置专门的显示字体
 (set-fontset-font t 'unicode (font-spec :family "Noto Color Emoji" :size 14))
 (set-fontset-font t '(#x2ff0 . #x9ffc) (font-spec :family "Sarasa Mono Slab SC" :size 18 :weight 'bold))
