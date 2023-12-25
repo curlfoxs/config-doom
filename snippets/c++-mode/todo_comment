@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: todo_comment
+# key: todo
+# --
+
+// TODO (foxouyang, 2023/$1 [2023/$2]): $3

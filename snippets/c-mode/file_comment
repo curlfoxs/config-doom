@@ -1,0 +1,9 @@
+# key: C-c f
+# name: file_comment
+# --
+/**
+* @file   : ${1:`(file-name-nondirectory (buffer-file-name))`}
+* @author : foxouyang
+* @date   : ${2:`(format-time-string "%Y/%m/%d")`}
+* @brief  : $3
+*/

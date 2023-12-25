@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: file_comment
+# key: file
+# --
+/**
+* @file   : ${1:`(file-name-nondirectory (buffer-file-name))`}
+* @brief  : $3
+* @author : foxouyang
+* @date   : ${2:`(format-time-string "%Y/%m/%d")`}
+*/

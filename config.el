@@ -24,8 +24,11 @@
 ;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
 ;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
 
-;; (setq doom-font "Cascadia Code PL Regular-10")
+(setq doom-font "Cascadia Mono PL Regular-9")
 ;; 给unicode字符集设置专门的显示字体
+;; (dolist (charset '(kana han symbol cjk-misc bopomofo))
+;; (set-fontset-font (frame-parameter nil 'font)
+;; charset (font-spec :family "Microsoft Yahei" :size 14)))
 (set-fontset-font t 'unicode (font-spec :family "Noto Color Emoji" :size 14))
 (set-fontset-font t '(#x2ff0 . #x9ffc) (font-spec :family "Sarasa Mono Slab SC" :size 18 :weight 'bold))
 ;;
@@ -37,7 +40,9 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
+;; (setq doom-theme 'modus-operandi)
+;; (setq doom-theme 'doom-one)
+(setq doom-theme 'doom-monokai-pro)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -80,29 +85,78 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+;; 1. key-mapping 快捷键设置
+;;
 (map! :map 'override
-     "M-." #'+lookup/definition)
+      ;; "C-k" #'sp-kill-sexp
+     "M-." #'+lookup/definition
+     "C-d" #'sp-kill-sexp
+     )
 
-(map! "M-o" #'+lookup/references
+(map!
+      "C-d" #'sp-kill-sexp
+      "M-p" #'lsp-ui-find-prev-reference
+      "M-n" #'lsp-ui-find-next-reference
+      "M-o" #'+lookup/references
       "C-<left>" #'previous-buffer
       "C-<right>" #'next-buffer
-      "C-s" #'save-buffer)
+      "C-s" #'save-buffer
+      "C-c c" #'org-capture
+      "C-c l" #'org-store-link
+      "C-c a" #'org-agenda
+      "C-c o j" #'org-clock-goto
+      "C-c o l" #'org-clock-in-last
+      "C-c o i" #'org-clock-in
+      "C-c o o" #'org-clock-out)
 
 (map! :map evil-normal-state-map
+      "C-d" #'sp-kill-symbol
+      "M-." #'+lookup/definition
       "e" #'er/expand-region)
 
 (map! :map evil-normal-state-map
       :prefix "SPC"
-      "r" #'consult-recent-file)
+      "r" #'consult-recent-file
+      "j s" #'consult-lsp-file-symbols
+      "j S" #'consult-lsp-symbols
+      )
 
-;; Unicode设置： emacs utf-8-unix (no BOM) coding system
+;; 2. Unicode设置： emacs utf-8-unix (no BOM) coding system
+;;
 (set-charset-priority 'unicode)
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+(set-clipboard-coding-system 'euc-cn)
 (setq system-time-locale "C")
 
 
-;; org.el
-(load! "lisp/init-org")
+;; 3. org.el
+(load! "lisp/init-org-roam")
+
+;; 4. half-transparency 半透明毛玻璃设置
+(defun toggle-transparency ()
+  (interactive)
+  (let ((alpha (frame-parameter nil 'alpha)))
+    (set-frame-parameter
+     nil 'alpha
+     (if (eql (cond ((numberp alpha) alpha)
+                    ((numberp (cdr alpha)) (cdr alpha))
+                    ;; Also handle undocumented (<active> <inactive>) form.
+                    ((numberp (cadr alpha)) (cadr alpha)))
+              100)
+         '(90 . 80) '(100 . 100)))))
+(global-set-key (kbd "C-c t") 'toggle-transparency)
+
+
+;; 5. minimap 右侧导航栏滚动条
+;; (minimap-mode nil)
+
+;; 6. llvm 设置 - clangd、clang-tidy、clang-format
+(setq flycheck-gcc-language-standard "c++17")
+(setq lsp-clients-clangd-executable "C:/Program Files/LLVM/bin/clangd.exe")
+(setq lsp-clients-clangd-args '("--clang-tidy" "-j=4" "--background-index" "--completion-style=detailed" "--header-insertion=never"))
+
+(setq clang-format-executable "C:/Program Files/LLVM/bin/clang-format.exe")

@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: function_comment
+# key: function
+# --
+/**
+* @brief      $1
+* @param[in]  $2
+* @return     $3
+*/

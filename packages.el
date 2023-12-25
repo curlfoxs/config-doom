@@ -52,3 +52,10 @@
 (package! rg)
 (package! ripgrep)
 (package! org-roam)
+;; (package! flycheck-clang-tidy
+;;   :after flycheck
+;;   :hook
+;;   (flycheck-mode . flycheck-clang-tidy-setup)
+;;   )
+
+(package! clang-format)
