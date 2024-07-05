@@ -24,7 +24,8 @@
 ;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
 ;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
 
-(setq doom-font "Cascadia Mono PL Regular-9")
+(setq doom-font "Cascadia Mono PL Regular-10")
+;; (setq doom-font "Fixedsys Excelsior 3.01-12")
 ;; 给unicode字符集设置专门的显示字体
 ;; (dolist (charset '(kana han symbol cjk-misc bopomofo))
 ;; (set-fontset-font (frame-parameter nil 'font)
@@ -85,7 +86,8 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-;; 1. key-mapping 快捷键设置
+
+;; 1. 个人使用习惯 key-mapping 快捷键设置
 ;;
 (map! :map 'override
       ;; "C-k" #'sp-kill-sexp
@@ -133,7 +135,9 @@
 (setq system-time-locale "C")
 
 
-;; 3. org.el
+;; 3. org强大工具使用之org.el和org-roam.el。还是继续使用purcell大师的时间管理配置。
+(after! org
+  (load! "lisp/init-org"))
 (load! "lisp/init-org-roam")
 
 ;; 4. half-transparency 半透明毛玻璃设置
@@ -154,9 +158,41 @@
 ;; 5. minimap 右侧导航栏滚动条
 ;; (minimap-mode nil)
 
-;; 6. llvm 设置 - clangd、clang-tidy、clang-format
+;; 6. cpp编程相关之llvm 设置 - clangd、clang-tidy、clang-format
 (setq flycheck-gcc-language-standard "c++17")
 (setq lsp-clients-clangd-executable "C:/Program Files/LLVM/bin/clangd.exe")
 (setq lsp-clients-clangd-args '("--clang-tidy" "-j=4" "--background-index" "--completion-style=detailed" "--header-insertion=never"))
 
 (setq clang-format-executable "C:/Program Files/LLVM/bin/clang-format.exe")
+
+;; 7. 设置cpp style
+(setq c-default-style "linux"
+      c-basic-offset 4
+      indent-tabs-mode t
+      clang-format-style-option "file"
+      )
+
+;; 8.1 临时禁用save-place功能。因为pdf和epub阅读会有冲突，后面有空再看看。
+(remove-hook 'find-file-hook #'save-place-find-file-hook)
+(remove-hook 'after-save-hook #'save-place-to-alist)
+(setq save-place-mode nil)
+;; 8.2 设置pdf-view的外观，为了方便摸鱼，设置成黑底白字。
+;; windows编译pdf-tools， 可以使用scoop和msys2
+;; pdf-view-midnight-minor-mode 启用黑皮肤
+;; 黑皮肤颜色设置可用： (setq pdf-view-midnight-colors '("#f8f8f2" . "#282a36"))
+(use-package pdf-tools
+  :config
+  (defun apply-pdf-tools-theme ()
+    "Make `pdf-tools' 'theme' match Emacs theme."
+    (if (eq (modus-themes--current-theme) modus-vivendi)
+        (pdf-view-midnight-minor-mode 1)
+      (pdf-view-midnight-minor-mode -1)))
+  :hook
+  (pdf-tools-enabled-hook . apply-pdf-tools-theme))
+
+;; 9. 配合z-lib和epub阅读器，直接在写银行相关软件的同时，最大程度地进行摸鱼。这里是对epub阅读器的配置。
+;; Nov.el for EPUB
+(use-package nov
+  :mode ("\\.epub\\'" . nov-mode)
+  :config
+  (setq nov-text-width 80))

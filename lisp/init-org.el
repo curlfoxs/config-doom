@@ -39,6 +39,10 @@
 ;; org-mode settings
 (setq org-default-notes-file  (expand-file-name "inbox.org" org-directory))
 (setq org-agenda-files (list org-directory))
+(setq org-deadline-warning-days 14) ; 设置截止日期警告天数
+(setq org-agenda-start-on-weekday 1) ; 设置 Agenda 从周一开始（1 代表周一，2 代表周二，以此类推）
+(setq org-agenda-span 'week) ; 设置 Agenda 视图的默认跨度为一周
+(setq org-agenda-ndays 7) ; 设置 Agenda 视图显示的天数为 7 天
 
 ;;; Capturing
 (global-set-key (kbd "C-c c") 'org-capture)
