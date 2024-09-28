@@ -159,11 +159,14 @@
 ;; (minimap-mode nil)
 
 ;; 6. cpp编程相关之llvm 设置 - clangd、clang-tidy、clang-format
+(setq llvm-bin-path "~/scoop/apps/llvm/current/bin")
+(setq clangd-bin-path (expand-file-name "clangd.exe" llvm-bin-path))
+(setq clangformat-bin-path (expand-file-name "clang-format.exe" llvm-bin-path))
 (setq flycheck-gcc-language-standard "c++17")
-(setq lsp-clients-clangd-executable "C:/Program Files/LLVM/bin/clangd.exe")
+(setq lsp-clients-clangd-executable clangd-bin-path)
 (setq lsp-clients-clangd-args '("--clang-tidy" "-j=4" "--background-index" "--completion-style=detailed" "--header-insertion=never"))
 
-(setq clang-format-executable "C:/Program Files/LLVM/bin/clang-format.exe")
+(setq clang-format-executable clangformat-bin-path)
 
 ;; 7. 设置cpp style
 (setq c-default-style "linux"
