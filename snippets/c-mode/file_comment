@@ -7,3 +7,4 @@
 * @date   : ${2:`(format-time-string "%Y/%m/%d")`}
 * @brief  : $3
 */
+#pragma once

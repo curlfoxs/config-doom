@@ -59,3 +59,5 @@
 ;;   )
 
 (package! clang-format)
+(package! lsp-treemacs)
+(package! company-quickhelp)
