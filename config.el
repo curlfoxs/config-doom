@@ -261,6 +261,8 @@
 
 (after! lsp-mode
   (custom-set-faces
+   ;; Keyword, Operator
+   '(lsp-face-semhl-operator ((t (:foreground "red" :slant italic)))) ;; red
    ;; Classes, structs, enums, interfaces, typedefs
    '(lsp-face-semhl-class ((t (:foreground "#FBB829" :slant italic :weight bold)))) ;; gold
    '(lsp-face-semhl-enum ((t (:foreground "#FBB829" :slant italic :weight bold)))) ;; gold
@@ -273,10 +275,11 @@
    '(lsp-face-semhl-parameter ((t (:foreground "gray"))))
    '(lsp-face-semhl-member ((t (:foreground "gray"))))
    '(lsp-face-semhl-property ((t (:foreground "#918175")))) ;; bright-black
-   '(lsp-face-semhl-constant ((t (:foreground "#FF5C8F")))) ;; bright-magentn
+   '(lsp-face-semhl-constant ((t (:foreground "#6D8143")))) ;; green
+   ;; '(lsp-face-semhl-number ((t (:foreground "#98BC37")))) ;; green
 
    ;; default-Libray
-   '(lsp-face-semhl-default-library ((t (:foreground "#B9771E")))) ;; 棕色比较合适
+   '(lsp-face-semhl-default-library ((t (:foreground "#FF8700" :weight bold)))) ;; 亮橙色
 
    ;; Functions/methods
    '(lsp-face-semhl-function ((t (:foreground "#FF8000")))) ;; orange
@@ -289,13 +292,19 @@
    ;; Local symbols in bold
    '(lsp-face-semhl-local ((t (:weight bold))))))
 
-(defun my-custom-keyword-faces ()
-  "Customize faces for keywords and constants."
-  (set-face-attribute 'font-lock-keyword-face nil
-                      :foreground "#EF2F27" ;; red
-                      :weight 'bold)
+(defun my-customize-theme ()
+  "Customize theme settings."
+  (set-face-attribute 'font-lock-string-face nil
+                      :foreground "#6D8143") ;; green
   (set-face-attribute 'font-lock-constant-face nil
-                      :foreground "#EF2F27"
-                      :weight 'bold))
-
-(add-hook 'after-load-theme-hook 'my-custom-keyword-faces)
+                      :foreground "#6D8143") ;; green
+  (set-face-attribute 'font-lock-keyword-face nil
+                      :foreground "red") ;; red
+  (set-face-attribute 'font-lock-type-face nil
+                      :foreground "red") ;; red
+  (set-face-attribute 'font-lock-builtin-face nil
+                      :foreground "#B9771E") ;; 棕色
+  )
+(defadvice load-theme (after theme-set-overrides activate)
+  "Apply customizations after loading a theme."
+  (my-customize-theme))
