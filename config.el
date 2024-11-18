@@ -234,6 +234,7 @@
 (use-package! srcery-theme
   :config
   (setq doom-theme 'srcery)
+  (setq doom-theme 'doom-dark+)
   )
 
 ;; 11. 自动保存
@@ -249,62 +250,15 @@
 ;;
 (setq company-continue-previous-commands t) ;; 允许连续选择补全
 (company-quickhelp-mode t)
+(use-package company
+  :ensure t
+  :config
+  (setq company-minimum-prefix-length 1)
+  (setq company-idle-delay 0.0)) ;; 延迟为 0 以便在键入时立即补全
 
 ;; 13. 提供更好用的lsp符号高亮。 和visual studio assist的符号高亮颜色保持一致，养成直观的条件反射
-(setq lsp-semantic-tokens-enable t)
-;; (after! lsp-mode
-;;   ;; 在这里添加你的 face 定义和 lsp 语义标记配置
-;;   (custom-set-faces
-;;    '(lsp-face-semhl-class ((t (:foreground "gold" :slant italic))))
-;;    '(lsp-face-semhl-variable ((t (:foreground "silver"))))
-;;    '(lsp-face-semhl-function ((t (:foreground "#FF8000"))))))
-
-(after! lsp-mode
-  (custom-set-faces
-   ;; Keyword, Operator
-   '(lsp-face-semhl-operator ((t (:foreground "red" :slant italic)))) ;; red
-   ;; Classes, structs, enums, interfaces, typedefs
-   '(lsp-face-semhl-class ((t (:foreground "#FBB829" :slant italic :weight bold)))) ;; gold
-   '(lsp-face-semhl-enum ((t (:foreground "#FBB829" :slant italic :weight bold)))) ;; gold
-   '(lsp-face-semhl-struct ((t (:foreground "silver" :slant italic :weight bold))));; silver
-   '(lsp-face-semhl-interface ((t (:foreground "silver" :slant italic :weight bold))));; silver
-   '(lsp-face-semhl-type ((t (:foreground "silver" :slant italic :weight bold))));; silver
-
-   ;; Variables
-   '(lsp-face-semhl-variable ((t (:foreground "gray")))) ;; bright-white
-   '(lsp-face-semhl-parameter ((t (:foreground "gray"))))
-   '(lsp-face-semhl-member ((t (:foreground "gray"))))
-   '(lsp-face-semhl-property ((t (:foreground "#918175")))) ;; bright-black
-   '(lsp-face-semhl-constant ((t (:foreground "#6D8143")))) ;; green
-   ;; '(lsp-face-semhl-number ((t (:foreground "#98BC37")))) ;; green
-
-   ;; default-Libray
-   '(lsp-face-semhl-default-library ((t (:foreground "#FF8700" :weight bold)))) ;; 亮橙色
-
-   ;; Functions/methods
-   '(lsp-face-semhl-function ((t (:foreground "#FF8000")))) ;; orange
-   '(lsp-face-semhl-method ((t (:foreground "#FF8000"))))
-   '(lsp-face-semhl-static ((t (:foreground "#FF8000"))))
-
-   ;; Preprocessor macros
-   ;; '(lsp-face-semhl-macro ((t (:foreground "#BD63C5"))))
-
-   ;; Local symbols in bold
-   '(lsp-face-semhl-local ((t (:weight bold))))))
-
-(defun my-customize-theme ()
-  "Customize theme settings."
-  (set-face-attribute 'font-lock-string-face nil
-                      :foreground "#6D8143") ;; green
-  (set-face-attribute 'font-lock-constant-face nil
-                      :foreground "#6D8143") ;; green
-  (set-face-attribute 'font-lock-keyword-face nil
-                      :foreground "red") ;; red
-  (set-face-attribute 'font-lock-type-face nil
-                      :foreground "red") ;; red
-  (set-face-attribute 'font-lock-builtin-face nil
-                      :foreground "#B9771E") ;; 棕色
-  )
-(defadvice load-theme (after theme-set-overrides activate)
-  "Apply customizations after loading a theme."
-  (my-customize-theme))
+(use-package! tree-sitter
+  :config
+  (require 'tree-sitter-langs)
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))

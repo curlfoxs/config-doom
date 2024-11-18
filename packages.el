@@ -61,3 +61,6 @@
 (package! clang-format)
 (package! lsp-treemacs)
 (package! company-quickhelp)
+(package! srcery-theme)
+(package! tree-sitter)
+(package! tree-sitter-langs)
